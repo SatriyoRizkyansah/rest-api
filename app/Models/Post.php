@@ -18,9 +18,9 @@ class Post extends Model
         'title', 'news_content', 'author_id', 'image'
     ];
 
-      public function author(): BelongsTo
+      public function writer(): BelongsTo
     {
-        return $this->BelongsTo(User::class);
+        return $this->BelongsTo(User::class, 'author_id', 'id');
     }
 
     /**
