@@ -9,4 +9,5 @@ use App\Http\Controllers\AuthenticationController;
 use App\Http\Middleware\PemilikKomentar;
 
 
+// Route::get('/posts', [PostController::class, 'index']);
 Route::get('/posts', [PostController::class, 'index']);
