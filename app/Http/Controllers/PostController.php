@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use Illuminate\Http\Request;
 use App\Http\Resources\PostResource;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Http\Resources\PostDetailResource;
+
 
 class PostController extends Controller
 {
@@ -31,9 +34,17 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StorePostRequest $request)
+    public function store(Request $request)
     {
-        //
+        $validate = $request->validate([
+            'title' => 'required|max:225',
+            'news_content' => 'required',
+        ]);
+
+        $request['author_id'] = Auth::user()->id;
+        $post = Post::create($request->all());
+        // return response()->json('Berhasil di akses');
+        return new PostDetailResource($post->loadMissing('writer:id,username'));
     }
 
     /**
