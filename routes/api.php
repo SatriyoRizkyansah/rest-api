@@ -20,6 +20,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::delete('/posts/{id}', [PostController::class, 'destroy'])->middleware(PemilikPostingan::class);
     
     Route::post('/comment', [CommentController::class, 'store']);
+    Route::patch('/comment/{id}', [CommentController::class, 'update'])->middleware(PemilikKomentar::class);
 });
 
 
