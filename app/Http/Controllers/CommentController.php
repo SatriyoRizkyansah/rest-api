@@ -35,5 +35,11 @@ class CommentController extends Controller
         $comment->update($request->all());
         return new CommentResource($comment->loadMissing('commentator:id,username'));
     }
+
+    function destroy($id){
+        $comment = Comment::findOrFail($id);
+        $comment->delete();
+        return response()->json(['message' => 'Koemntar deleted'], 200);
+    }
     
 }
