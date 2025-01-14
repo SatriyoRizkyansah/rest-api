@@ -20,10 +20,10 @@ class PostController extends Controller
     {
         $posts = Post::all(); 
         // return response()->json(['data' => $posts]);
-        return PostResource::collection($posts);
+        return PostDetailResource::collection($posts->loadMissing('writer:id,username'));
     }
 
-    /**
+    /*
      * Show the form for creating a new resource.
      */
     public function create()
@@ -67,9 +67,12 @@ class PostController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatePostRequest $request, Post $post)
+    public function update($id, Request $request)
     {
-        //
+        // $validate = $request->validate([
+        //     'title' => 'required|max:225',
+        //     'news_content' => 'required',
+        // ]);
     }
 
     /**
