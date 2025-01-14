@@ -69,17 +69,21 @@ class PostController extends Controller
      */
     public function update($id, Request $request)
     {
-        // $validate = $request->validate([
-        //     'title' => 'required|max:225',
-        //     'news_content' => 'required',
-        // ]);
+        $validate = $request->validate([
+            'title' => 'required|max:225',
+            'news_content' => 'required',
+        ]);
+
+        $post = Post::findOrFail($id);
+        $post->update($request->all());
+        return new PostDetailResource($post->loadMissing('writer:id,username'));
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Post $post)
+    public function destroy($id)
     {
-        //
+        
     }
 }
