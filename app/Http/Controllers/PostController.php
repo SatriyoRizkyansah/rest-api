@@ -43,14 +43,16 @@ class PostController extends Controller
             'news_content' => 'required',
         ]);
 
+        $image = null;
         if ($request->file){
             $fileName = $this->generateRandomString();
             $extension = $request->file->extension();
+            $image = $fileName.'.'.$extension;
 
             Storage::putFileAs('image', $request->file, $fileName.'.'.$extension);
         }
 
-        $request['image'] = $fileName.'.'.$extension;
+        $request['image'] = $image;
         $request['author_id'] = Auth::user()->id;
         $post = Post::create($request->all());
         // return response()->json('Berhasil di akses');
