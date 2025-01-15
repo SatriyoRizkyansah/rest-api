@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Resources\PostResource;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StorePostRequest;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\UpdatePostRequest;
 use App\Http\Resources\PostDetailResource;
 
@@ -36,11 +37,20 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+        // return $request->file;
         $validate = $request->validate([
             'title' => 'required|max:225',
             'news_content' => 'required',
         ]);
 
+        if ($request->file){
+            $fileName = $this->generateRandomString();
+            $extension = $request->file->extension();
+
+            Storage::putFileAs('image', $request->file, $fileName.'.'.$extension);
+        }
+
+        $request['image'] = $fileName.'.'.$extension;
         $request['author_id'] = Auth::user()->id;
         $post = Post::create($request->all());
         // return response()->json('Berhasil di akses');
@@ -88,4 +98,17 @@ class PostController extends Controller
         $post->delete();
         return new PostDetailResource($post->loadMissing('writer:id,username'));
     }
+
+    function generateRandomString($length = 10) {
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $charactersLength = strlen($characters);
+    $randomString = '';
+
+    for ($i = 0; $i < $length; $i++) {
+        $randomString .= $characters[random_int(0, $charactersLength - 1)];
+    }
+
+    return $randomString;
+}
+
 }
